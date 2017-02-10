@@ -68,6 +68,11 @@ getHTML('www.onairvideo.com', '/croquis-cafe-photos.html').then(function (archiv
           res.pipe(photo);
 
           res.on('end', function () {
+            if (res.statusCode == 500) {
+              photos.splice(photoIndex, 1);
+              photoIndex--;
+            }
+
             if (photoIndex + 1 < photos.length) {
               downloadPhoto(photoIndex + 1);
             } else if (modelIndex + 1 < models.length) {
