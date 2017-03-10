@@ -53,9 +53,9 @@ function scrapeArchive(directoryPath, requestPath) {
     const models = archiveHTML.match(/cc-photo-archive.{2,}?\.html/g);
 
     // since the archive is split into multiple pages, there may be a path to the next page
-    let nextPagePath = archiveHTML.match(/href="croquis-cafe-photo[\w-]+\.html"><span class="button-content wsb-button-content" style="white-space:nowrap">Newer [Pp]hotos<\/span>/);
-    if (nextPagePath != null) {
-      nextPagePath = '/' + nextPagePath[0].match(/croquis-cafe-photo.+\.html/)[0];
+    let nextPagePath = /href="(croquis-cafe-photo[\w-]+\.html)"><span class="button-content wsb-button-content" style="white-space:nowrap">Newer [Pp]hotos<\/span>/.exec(archiveHTML);
+    if (nextPagePath !== null) {
+      nextPagePath = '/' + nextPagePath[1];
     }
 
     /**
@@ -65,37 +65,42 @@ function scrapeArchive(directoryPath, requestPath) {
     function scrapeModel(modelIndex) {
       getHTML('www.onairvideo.com', '/' + models[modelIndex]).then((modelHTML) => {
         // array of strings containing photo URLs
-        const photos = modelHTML.match(/"src":"\/\/nebula\.wsimg\.com\/\w{32}\?AccessKeyId=05ECB8D9DFC0F8678544&disposition=0&alloworigin=1"/g);
+        const photoURLs = [];
+        const photoRegex = /"src":"\/\/nebula\.wsimg\.com(\/\w{32}\?AccessKeyId=05ECB8D9DFC0F8678544)&disposition=0&alloworigin=1"/g;
+        let photoURL;
+        while ((photoURL = photoRegex.exec(modelHTML)) !== null) {
+          photoURLs.push(photoURL[1]);
+        }
         const modelName = models[modelIndex].substring(17, models[modelIndex].length - 5);
 
         /**
          * Make an HTTP request for a photo and save the response as a file.
-         * @param {number} photoIndex Index of a photo from the "photos" array.
+         * @param {number} photoIndex Index of a photo from the "photoURLs" array.
          */
         function downloadPhoto(photoIndex) {
           // basic progress indicator
           readline.clearLine(process.stdout, 0);
           readline.cursorTo(process.stdout, 0);
-          process.stdout.write(`Downloading "${modelName}" photo ${photoIndex} of ${photos.length}`);
+          process.stdout.write(`Downloading "${modelName}" photo ${photoIndex} of ${photoURLs.length}`);
 
           http.get({
             hostname: 'nebula.wsimg.com',
-            path: photos[photoIndex].substring(25, 91)
+            path: photoURLs[photoIndex]
           }, (res) => {
-            const photo = fs.createWriteStream(path.join(directoryPath, modelName, photoIndex + '.jpg'));
-            res.pipe(photo);
+            const photoFile = fs.createWriteStream(path.join(directoryPath, modelName, photoIndex + '.jpg'));
+            res.pipe(photoFile);
 
             res.on('end', () => {
               if (res.statusCode == 500) {
-                photos.splice(photoIndex, 1);
+                photoURLs.splice(photoIndex, 1);
                 photoIndex--;
               }
 
-              if (photoIndex + 1 < photos.length) {
+              if (photoIndex + 1 < photoURLs.length) {
                 downloadPhoto(photoIndex + 1);
               } else if (modelIndex + 1 < models.length) {
                 scrapeModel(modelIndex + 1);
-              } else if (nextPagePath != null) {
+              } else if (nextPagePath !== null) {
                 scrapeArchive(directoryPath, nextPagePath);
               } else {
                 readline.clearLine(process.stdout, 0);
