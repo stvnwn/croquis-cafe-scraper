@@ -1,6 +1,6 @@
 # croquis-cafe-scraper
 
-Download the [Croquis Cafe photo archive](http://www.onairvideo.com/croquis-cafe-photo-archive.html).
+Download the [Croquis Cafe photo archive](http://www.onairvideo.com/photo-archive.html).
 
 ## General Instructions
 

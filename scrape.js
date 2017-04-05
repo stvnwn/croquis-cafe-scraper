@@ -53,7 +53,7 @@ function scrapeArchive(directoryPath, requestPath) {
     const models = archiveHTML.match(/cc-photo-archive.{2,}?\.html/g);
 
     // since the archive is split into multiple pages, there may be a path to the next page
-    let nextPagePath = /href="(croquis-cafe-photo[\w-]+\.html)"><span class="button-content wsb-button-content" style="white-space:nowrap">Newer [Pp]hotos<\/span>/.exec(archiveHTML);
+    let nextPagePath = /href="([\w-.]+)"><span class="button-content wsb-button-content" style="white-space:nowrap">Newer [Pp]hotos<\/span>/.exec(archiveHTML);
     if (nextPagePath !== null) {
       nextPagePath = '/' + nextPagePath[1];
     }
