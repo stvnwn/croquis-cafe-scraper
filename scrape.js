@@ -1,8 +1,9 @@
 // module dependencies
-const http = require('http');
 const fs = require('fs');
-const readline = require('readline');
+const http = require('http');
 const path = require('path');
+const readline = require('readline');
+const https = require('https');
 
 const archivePath = process.argv[2];
 
@@ -74,7 +75,7 @@ function scrapeArchive(directoryPath, requestPath) {
         const modelName = models[modelIndex].substring(17, models[modelIndex].length - 5);
 
         /**
-         * Make an HTTP request for a photo and save the response as a file.
+         * Make an HTTPS request for a photo and save the response as a file.
          * @param {number} photoIndex Index of a photo from the "photoURLs" array.
          */
         function downloadPhoto(photoIndex) {
@@ -83,7 +84,7 @@ function scrapeArchive(directoryPath, requestPath) {
           readline.cursorTo(process.stdout, 0);
           process.stdout.write(`Downloading "${modelName}" photo ${photoIndex} of ${photoURLs.length}`);
 
-          http.get({
+          https.get({
             hostname: 'nebula.wsimg.com',
             path: photoURLs[photoIndex]
           }, (res) => {
