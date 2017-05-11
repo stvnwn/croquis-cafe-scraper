@@ -23,7 +23,7 @@ function getHTML(hostname, path) {
         getHTML(hostname, path).then((nestedHTML) => {
           resolve(nestedHTML);
         }).catch((e) => {
-          console.log('Error: ' + e.message);
+          reject(e);
         });
       }
       else {
