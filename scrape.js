@@ -20,11 +20,9 @@ function getHTML(hostname, path) {
       path: path
     }, (res) => {
       if (res.statusCode == 302) {
-        getHTML(hostname, path).then((nestedHTML) => {
-          resolve(nestedHTML);
-        }).catch((e) => {
-          reject(e);
-        });
+        getHTML(hostname, path)
+          .then(resolve)
+          .catch(reject);
       }
       else {
         let HTML = '';
