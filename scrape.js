@@ -61,7 +61,7 @@ function scrapeArchive(requestPath) {
     // since the archive is split into multiple pages, there may be a path to the next page
     let nextPagePath = /href="([\w-.]+)"><span class="button-content wsb-button-content" style="white-space:nowrap">Newer [Pp]hotos<\/span>/.exec(archiveHTML);
     if (nextPagePath !== null) {
-      nextPagePath = '/' + nextPagePath[1];
+      nextPagePath = `/${nextPagePath[1]}`;
     }
 
     /**
@@ -69,7 +69,7 @@ function scrapeArchive(requestPath) {
      * @param {number} modelIndex Index of a model's path from the "modelPaths" array.
      */
     function scrapeModel(modelIndex) {
-      getHTML('www.onairvideo.com', '/' + modelPaths[modelIndex]).then((modelHTML) => {
+      getHTML('www.onairvideo.com', `/${modelPaths[modelIndex]}`).then((modelHTML) => {
         // array of strings containing photo URLs
         const photoURLs = [];
         const photoRegex = /"src":"\/\/nebula\.wsimg\.com(\/\w{32}\?AccessKeyId=05ECB8D9DFC0F8678544)&disposition=0&alloworigin=1"/g;
@@ -84,10 +84,10 @@ function scrapeArchive(requestPath) {
          */
         function downloadPhoto(photoIndex) {
           // do not overwrite files
-          if (fs.existsSync(path.join(archivePath, modelName, photoIndex + 1 + '.jpg'))) {
+          if (fs.existsSync(path.join(archivePath, modelName, `${photoIndex + 1}.jpg`))) {
             readline.clearLine(process.stdout, 0);
             readline.cursorTo(process.stdout, 0);
-            console.log(`"${path.join(archivePath, modelName, photoIndex + 1 + '.jpg')}" already exists`);
+            console.log(`"${path.join(archivePath, modelName, `${photoIndex + 1}.jpg`)}" already exists`);
             console.log('Usage: node scrape.js <directory-path> [<model-name>...]');
             process.exit(1);
           }
@@ -103,7 +103,7 @@ function scrapeArchive(requestPath) {
           }, (res) => {
             // write if no server error, do not otherwise (response stream is still switched into flowing mode)
             if (res.statusCode != 500) {
-              const photoFile = fs.createWriteStream(path.join(archivePath, modelName, photoIndex + 1 + '.jpg'));
+              const photoFile = fs.createWriteStream(path.join(archivePath, modelName, `${photoIndex + 1}.jpg`));
               res.pipe(photoFile);
             } else {
               res.resume();
@@ -123,7 +123,7 @@ function scrapeArchive(requestPath) {
               }
             });
           }).on('error', e => {
-            console.log('Error: ' + e.message);
+            console.log(`Error: ${e.message}`);
           });
         }
 
@@ -146,7 +146,7 @@ function scrapeArchive(requestPath) {
           downloadPhoto(0);
         });
       }).catch((e) => {
-        console.log('Error: ' + e.message);
+        console.log(`Error: ${e.message}`);
       });
     }
 
@@ -160,7 +160,7 @@ function scrapeArchive(requestPath) {
       console.log('Download complete');
     }
   }).catch((e) => {
-    console.log('Error: ' + e.message);
+    console.log(`Error: ${e.message}`);
   });
 }
 
