@@ -39,7 +39,7 @@ If you specify a model "name" that was not derived from the URL of a model's pag
 If you have downloaded the entire archive before, you can download any additions to the archive by running this:
 
 ```
-node scrape.js <directory-path> `ls <directory-path>`
+node scrape.js <directory-path> $(ls <directory-path>)
 ```
 
 where `<directory-path>` refers to the directory where the archive was downloaded to before.

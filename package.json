@@ -1,6 +1,6 @@
 {
   "name": "croquis-cafe-scraper",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "Download the Croquis Cafe photo archive.",
   "main": "scrape.js",
   "scripts": {
