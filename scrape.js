@@ -118,11 +118,11 @@ function scrapeModel(modelPath) {
 
         (function downloadModelPhotos(photoIndex) {
           if (photoIndex < photoURLs.length) {
-            downloadPhoto(photoURLs[photoIndex], `${photoIndex + 1}.jpg`).then(() => {
+            downloadPhoto(photoURLs[photoIndex], `${photoIndex}.jpg`).then(() => {
               // basic progress indicator
               readline.clearLine(process.stdout, 0);
               readline.cursorTo(process.stdout, 0);
-              process.stdout.write(`Downloaded "${modelName}" photo ${photoIndex + 1} of ${photoURLs.length}`);
+              process.stdout.write(`Attempted to download ${modelName}/${photoIndex}.jpg ("${modelName}" photo ${photoIndex + 1} of ${photoURLs.length})`);
 
               downloadModelPhotos(photoIndex + 1);
             }).catch(reject);
