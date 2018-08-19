@@ -156,7 +156,7 @@ function scrapeArchivePage(requestPath) {
       });
 
       // since the archive is split into multiple pages, there may be a path to the next page
-      let nextPagePath = /href="([\w-.]+)"><span class="button-content wsb-button-content" style="white-space:nowrap">Newer [Pp]hotos<\/span>/.exec(archiveHTML);
+      let nextPagePath = /href="([\w-.]+)"><span class="button-content wsb-button-content" style="white-space:nowrap">Older Photos<\/span>/.exec(archiveHTML);
       if (nextPagePath !== null) {
         nextPagePath = `/${nextPagePath[1]}`;
       }
@@ -206,5 +206,5 @@ fs.access(archivePath, fs.constants.W_OK | fs.constants.X_OK, (err) => {
       readline.cursorTo(process.stdout, 0);
       console.log('Download complete');
     }
-  }('/croquis-cafe-photos1.html'));
+  }('/photo-archive.html'));
 });
