@@ -20,7 +20,7 @@ After execution, the specified directory will have subdirectories for each model
 
 Subdirectories are named after models.
 
-Photos in a subdirectory are numbered from 1 to the total number of photos for the corresponding model.
+Photos in a subdirectory are numbered from 0 to the total number of photos for the corresponding model, minus 1.
 
 If the scraper cannot download a photo, the photo's number is skipped.
 

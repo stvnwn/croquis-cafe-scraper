@@ -1,11 +1,15 @@
 {
   "name": "croquis-cafe-scraper",
-  "version": "3.1.1",
+  "version": "4.0.0",
   "description": "Download the Croquis Cafe photo archive.",
-  "main": "scrape.js",
-  "scripts": {
-    "test": "node scrape.js"
-  },
   "author": "Steven Huynh",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "jest",
+    "prettier": "prettier --write \"*.js\""
+  },
+  "devDependencies": {
+    "jest": "^24.1.0",
+    "prettier": "^1.16.4"
+  }
 }
